@@ -1,0 +1,228 @@
+C51 COMPILER V9.60.7.0   CAL                                                               05/08/2024 22:59:01 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE CAL
+OBJECT MODULE PLACED IN .\Objects\cal.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE cal.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\cal.l
+                    -st) TABS(2) OBJECT(.\Objects\cal.obj)
+
+line level    source
+
+   1          #include"cal.h"
+   2          char reset_flag=0;
+   3          long int num1,num2;
+   4          char oper;
+   5          char op[16];
+   6          void operationScan(void)
+   7          {
+   8   1        char i=0;
+   9   1        char x='1';
+  10   1        
+  11   1        for(i=0;(i<15)&&(x!='=');i++)
+  12   1        {
+  13   2          x=readKey();
+  14   2          if(x==' ')
+  15   2          {
+  16   3            reset_flag=1;
+  17   3            break;
+  18   3          }
+  19   2          else{
+  20   3          lcdData(x);
+  21   3            op[i]=x;
+  22   3          }
+  23   2        }
+  24   1        
+  25   1        while(x!='='&&!reset_flag)
+  26   1        {
+  27   2          x=readKey();
+  28   2          if(x==' ')
+  29   2          {
+  30   3            reset_flag=1;
+  31   3            break;
+  32   3          }
+  33   2          else if(x=='=')
+  34   2          {
+  35   3            lcdData('=');
+  36   3          }
+  37   2        }
+  38   1        
+  39   1        
+  40   1      }
+  41          void lcd_clear(void)
+  42          {
+  43   1        
+  44   1        int i;
+  45   1        lcdCommand(CLEAR_SCREAN);
+  46   1        for(i=0;i<300;i++);
+  47   1      }
+  48          void errorDisp(void)
+  49          {
+  50   1        lcd_clear();
+  51   1        lcdDesplay("error");
+  52   1      }
+  53          
+  54          char syntaxCheck(long int*num,char*h,char first_op)
+C51 COMPILER V9.60.7.0   CAL                                                               05/08/2024 22:59:01 PAGE 2   
+
+  55          {
+  56   1        char i=*h;
+  57   1        long int temp=0;
+  58   1        if(op[i]=='='||op[i]=='+'||op[i]=='/'||op[i]=='*')
+  59   1        {
+  60   2          
+  61   2          return 0;
+  62   2        }
+  63   1        else if(op[i]=='-')
+  64   1        {
+  65   2          if(op[i+1]=='+'||op[i+1]=='*'||op[i+1]=='-'||op[i+1]=='/')
+  66   2            {
+  67   3              return 0;
+  68   3            }
+  69   2          i++;
+  70   2          while((op[i]<='9')&&(op[i]>='0'))
+  71   2          {
+  72   3            if(!first_op){
+  73   4            if(op[i+1]=='+'||op[i+1]=='*'||op[i+1]=='-'||op[i+1]=='/')
+  74   4            {
+  75   5              return 0;
+  76   5            }
+  77   4          }
+  78   3            temp=(temp*10)+(op[i++]-'0');
+  79   3          }
+  80   2          *num=-temp;
+  81   2        }
+  82   1        else if((op[i]<='9')&&(op[i]>='0'))
+  83   1        {
+  84   2          
+  85   2          while((op[i]<='9')&&(op[i]>='0'))
+  86   2          {
+  87   3            if(!first_op){
+  88   4            if(op[i+1]=='+'||op[i+1]=='*'||op[i+1]=='-'||op[i+1]=='/')
+  89   4            {
+  90   5              return 0;
+  91   5            }
+  92   4          }
+  93   3            temp=(temp*10)+(op[i]-'0');
+  94   3            i++;
+  95   3            
+  96   3          }
+  97   2          
+  98   2          *num=temp;
+  99   2        
+ 100   2        }
+ 101   1        else{
+ 102   2          return 0;
+ 103   2        }
+ 104   1        *h=i;
+ 105   1        return 1;
+ 106   1      }
+ 107          
+ 108          char check(void)
+ 109          {
+ 110   1        char i;
+ 111   1        i=0;
+ 112   1          if(syntaxCheck(&num1,&i,1))
+ 113   1          {
+ 114   2            oper=op[i++];
+ 115   2            if(oper!='='){
+ 116   3            if(syntaxCheck(&num2,&i,0))
+C51 COMPILER V9.60.7.0   CAL                                                               05/08/2024 22:59:01 PAGE 3   
+
+ 117   3              {
+ 118   4                  
+ 119   4              }
+ 120   3              else{
+ 121   4                errorDisp();
+ 122   4                return 0;
+ 123   4              } 
+ 124   3              }
+ 125   2            }
+ 126   1            else{
+ 127   2                
+ 128   2                errorDisp();
+ 129   2                return 0;
+ 130   2              }
+ 131   1          
+ 132   1          return 1;
+ 133   1          
+ 134   1        
+ 135   1      }
+ 136          void divide_complete(void)
+ 137          {
+ 138   1        int print;
+ 139   1        char i=0;
+ 140   1        long int rem=num1%num2;
+ 141   1        rem*=10;
+ 142   1        lcdData('.');
+ 143   1        for(i=0;i<7&&rem!=0;i++)
+ 144   1        {
+ 145   2          print=rem/num2;
+ 146   2          lcdData((print)+'0');
+ 147   2          if(print==0)
+ 148   2          {
+ 149   3            rem*=10;
+ 150   3          }
+ 151   2          else{
+ 152   3          rem=rem%num2;
+ 153   3          }
+ 154   2          
+ 155   2          
+ 156   2        }
+ 157   1        
+ 158   1        
+ 159   1      }
+ 160          void ansDesplay(char oper,long int*ans)
+ 161          {
+ 162   1        
+ 163   1        
+ 164   1          switch (oper)
+ 165   1            {
+ 166   2              case '=':
+ 167   2                lcdCommand(FORCE_TO_SECOND_ROW);
+ 168   2              *ans =num1;
+ 169   2                lcdDisplayNum(*ans);
+ 170   2              break;
+ 171   2              case '-':
+ 172   2                lcdCommand(FORCE_TO_SECOND_ROW);
+ 173   2              *ans=num1-num2;
+ 174   2                lcdDisplayNum(*ans);
+ 175   2              break;
+ 176   2              case '*':
+ 177   2                lcdCommand(FORCE_TO_SECOND_ROW);
+ 178   2              *ans=num1*num2;
+C51 COMPILER V9.60.7.0   CAL                                                               05/08/2024 22:59:01 PAGE 4   
+
+ 179   2                lcdDisplayNum(*ans);
+ 180   2              break;
+ 181   2              case '+':
+ 182   2              lcdCommand(FORCE_TO_SECOND_ROW);
+ 183   2              *ans =num1+num2;
+ 184   2              lcdDisplayNum(*ans);
+ 185   2              break;
+ 186   2              case '/':
+ 187   2              lcdCommand(FORCE_TO_SECOND_ROW);
+ 188   2              *ans =num1/num2;
+ 189   2              lcdDisplayNum(*ans);
+ 190   2              if(num1%num2)
+ 191   2              {
+ 192   3                divide_complete();
+ 193   3              }
+ 194   2              break;
+ 195   2            }
+ 196   1        
+ 197   1        
+ 198   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    992    ----
+   CONSTANT SIZE    =      6    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     26      25
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

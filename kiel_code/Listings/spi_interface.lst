@@ -1,0 +1,28 @@
+C51 COMPILER V9.60.7.0   SPI_INTERFACE                                                     05/07/2024 00:54:56 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SPI_INTERFACE
+OBJECT MODULE PLACED IN .\Objects\spi_interface.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE spi_interface.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\spi_interface.lst) TABS(2) OBJECT(.\Objects\spi_interface.obj)
+
+line level    source
+
+   1          bit sun(void)
+   2          {
+   3   1        return 0;
+   4   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =      2    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,8 @@
+".\Objects\adc.obj",
+".\Objects\cal.obj",
+".\Objects\interface.obj",
+".\Objects\keypad.obj",
+".\Objects\lcd.obj",
+".\Objects\spi_interface.obj" 
+TO ".\Objects\NEW" 
+PRINT(".\Listings\NEW.m51")

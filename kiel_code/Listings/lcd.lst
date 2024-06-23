@@ -1,0 +1,118 @@
+C51 COMPILER V9.60.7.0   LCD                                                               05/08/2024 22:59:01 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD
+OBJECT MODULE PLACED IN .\Objects\lcd.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lcd.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\lcd.l
+                    -st) TABS(2) OBJECT(.\Objects\lcd.obj)
+
+line level    source
+
+   1          
+   2          #include "lcd.h"
+   3          char i=0;
+   4          char num_arr[10];
+   5          void lcdDelay(void)
+   6          {
+   7   1          unsigned int j;
+   8   1          for(j=0; j<10; j++);
+   9   1      }
+  10          void lcdCommand(char command)
+  11          {
+  12   1          LCD_PORT=command;
+  13   1          RS=0;
+  14   1          E=1;
+  15   1          E=0;
+  16   1          lcdDelay();
+  17   1      }
+  18          void lcdData(char dataa)
+  19          {
+  20   1          LCD_PORT=dataa;
+  21   1          RS=1;
+  22   1          E=1;
+  23   1          E=0;
+  24   1          lcdDelay();
+  25   1      }
+  26          
+  27          void lcdInti(void)
+  28          {
+  29   1        int i;
+  30   1          lcdCommand(DISPLAY_ON__CURSOR_ON );
+  31   1          lcdCommand(SET_8_BIT_2_LINE);
+  32   1      
+  33   1      }
+*** WARNING C280 IN LINE 29 OF lcd.c: 'i': unreferenced local variable
+  34          
+  35          
+  36          
+  37          void lcdDesplay(char*letter)
+  38          {
+  39   1          char i=0;
+  40   1          while(letter[i])
+  41   1          {
+  42   2              lcdData(letter[i]);
+  43   2              i++;
+  44   2          }
+  45   1      
+  46   1      }
+  47          void lcdDisplayNum(long int num)
+  48          {
+  49   1          if(num==0)
+  50   1          {
+  51   2              lcdData('0');
+  52   2          }
+  53   1          else
+C51 COMPILER V9.60.7.0   LCD                                                               05/08/2024 22:59:01 PAGE 2   
+
+  54   1          {
+  55   2              if((num>>31)&1)
+  56   2              {
+  57   3                  lcdData('-');
+  58   3                  num=num*-1;
+  59   3                  num_package(num);
+  60   3      
+  61   3                  while(i>0)
+  62   3                  {
+  63   4                      lcdData(num_arr[--i]);
+  64   4      
+  65   4      
+  66   4                  }
+  67   3      
+  68   3              }
+  69   2              else
+  70   2              {
+  71   3                  num_package(num);
+  72   3                  while(i>0)
+  73   3                  {
+  74   4                      lcdData(num_arr[--i]);
+  75   4                  }
+  76   3              }
+  77   2      
+  78   2          }
+  79   1      
+  80   1      
+  81   1      }
+  82          void num_package(long int num)
+  83          {
+  84   1          i=0;
+  85   1          while(num)
+  86   1          {
+  87   2              num_arr[i]=(num%10)+'0';
+  88   2              num=num/10;
+  89   2              i++;
+  90   2          }
+  91   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    283    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     11      13
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
